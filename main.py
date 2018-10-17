@@ -8,9 +8,21 @@ from sys import exit
 #Constant
 width_screen=600
 height_screen=480
+fps= 30
 
 color_green=(100,155,0)
 color_white=(255,255,255)
+
+def action_event(event):
+	#Keyboard pressed
+	if event.type==pygame.KEYDOWN:
+		if event.key == pygame.K_SPACE:
+			print("Down")
+	
+	#Keyboard released
+	if event.type==pygame.KEYUP:
+		if event.key == pygame.K_SPACE:
+			print("Up")
 
 def main():
 	#initialisation of the pygame library
@@ -24,17 +36,50 @@ def main():
 
 	#Definition of the main screen title
 	pygame.display.set_caption("Mac Gyver Maze")
+	
+	#FPS Management
+	clock=pygame.time.Clock()
+	
+	#Creation of a rectangle
+	#Creation of the dimension
+	box_surface=pygame.Surface((20,20))
+	#Surface color
+	box_surface.fill((0,20,100))
+	#Kind of the surface = rectangle
+	box_rect=box_surface.get_rect()
+	#Position
+	box_rect.center=((300,200))
+	
+	print("x={0}, y={1}, w={2},h={3}".format(box_rect.x,box_rect.y,box_rect.w,box_rect.w))
 
 	#Launch the infinity loop
 	while running == True:
-		#Screen Exit - X on the top right of the screen
+		
+		#FPS management
+		delta_ms=clock.tick(fps)
+		delta_s=delta_ms/1000
+		
+		print("Delta_ms= {}".format(delta_s))
+		
+		#Event management
 		for evt in pygame.event.get():
+			#Screen Exit - X on the top right of the screen
 			if evt.type == pygame.QUIT:
 				running=False
-			endif
+			
+			#Keyboard pressed
+			if evt.type==pygame.KEYDOWN:
+				if evt.key == pygame.K_ESCAPE:
+					running=False
+					
+			#Keyboard management
+			action_event(evt)		
 
 		#Fill background color
 		screen.fill(color_green)
+		
+		#Surface management
+		screen.blit(box_surface,box_rect)
 
 		#display the result
 		pygame.display.flip()
