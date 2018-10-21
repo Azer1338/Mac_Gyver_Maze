@@ -1,5 +1,48 @@
 # -*- coding: utf-8 -*-
 
+import pygame
+import map_generator
+
+
+class Character(pygame.sprite.Sprite):
+	#Creation of characters Mac Gyver and Guard
+	
+	def __init__(self, Who, Kind_of):
+		#Load of the legacy from the library
+		pygame.sprite.Sprite.__init__(self)
+
+		#Load the picture
+		if Kind_of == "Heroes" :
+			#Motion of the Mac_Gyver icon
+			self.image, self.image_rect = map_generator.load_png("./ressource/MacGyver.png")
+		else:
+			#Motion of the Guard icon
+			self.image, self.image_rect = map_generator.load_png("./ressource/Gardien.png")
+		
+		screen = pygame.display.get_surface()
+		self.area = screen.get_rect()
+		self.speed = Sprite_size
+		#self.position='''
+		pass
+	'''	
+	def update(self):
+		pass
+		#newpos= 
+		
+	
+	def move_up(self):
+		print("Up")
+	
+	def move_down(self):
+		print("Down")
+		
+	def move_left(self):
+		print("Left")
+		
+	def move_right(self):
+		print("Right")
+		'''
+		
 def create_actors():
 	#images
 	global jungle,jungle_rect
