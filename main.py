@@ -4,6 +4,7 @@ import pygame
 
 import sound_management
 import map_generator
+import maze_generator
 import label_generator
 import actors_generator
 
@@ -15,20 +16,18 @@ def Sound_generation():
 	pygame.mixer.init()
 	sound_management.activation_music()
 	#sound_management.activation_sound()
-
-
-def Map_generation():
-	#Creation of the screen
-	First_screen = map_generator.Monitor()
+		
+def Character_generation(screen):
+	#Player generation
+	#player_on_screen = actors_generator.Character("Mac_Gyver")
+	#screen.blit(player_on_screen.character_icon,(player_on_screen.pos_x_char,player_on_screen.pos_y_char))
+	pass
 	
-	#Creation of the map
-	First_screen.map_init()
-
-
-def Character_generation():
-	#Initialisation of the player
-	player = actors_generator.Character("Mac_Gyver","Heroes")
-	#final_Guard = actors_generator.Character("Guard","Vilain")
+def update_screen(Screen_to_update,character):
+	Screen_to_update.update_background_screen()
+	Screen_to_update.screen.blit(character.character_icon,(character.pos_x_char,character.pos_y_char))
+	Screen_to_update.display_on_screen()
+	pass
 	
 def main():
 	
@@ -36,16 +35,19 @@ def main():
 	Sound_generation()
 	
 	#Map Generation
-	Map_generation()
+	First_screen = map_generator.Monitor()
 	
-	#Characters Generation 
-	#Character_generation()
+	#Player generation
+	player_on_screen = actors_generator.Character("Mac_Gyver")
 	
-	#Infinity loop to catch the player moves
-	#Creation of the inifinity loop
+	#Infinity loop to catch the player moves and regenerate the maze
 	infinity_loop = True
 	
+	#Launch the loop
 	while infinity_loop == True:
+		#update the screen
+		update_screen(First_screen,player_on_screen)
+		
 		#Exit screen 
 		for evt in pygame.event.get():
 			#Screen Exit - X on the top right of the screen
@@ -56,13 +58,13 @@ def main():
 				if evt.key == pygame.K_ESCAPE:
 					infinity_loop=False
 				if evt.key == pygame.K_UP:
-					player.move_up()
+					player_on_screen.move_up()
 				if evt.key == pygame.K_DOWN:
-					player.move_down()
+					player_on_screen.move_down()
 				if evt.key == pygame.K_LEFT:
-					player.move_left()
+					player_on_screen.move_left()
 				if evt.key == pygame.K_RIGHT:
-					player.move_right()
+					player_on_screen.move_right()
 				if evt.key == pygame.K_SPACE:
 					print("0")
 

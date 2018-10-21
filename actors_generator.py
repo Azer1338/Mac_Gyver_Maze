@@ -4,112 +4,62 @@ import pygame
 import map_generator
 
 
-class Character(pygame.sprite.Sprite):
-	#Creation of characters Mac Gyver and Guard
+class Character():
 	
-	def __init__(self, Who, Kind_of):
-		#Load of the legacy from the library
-		pygame.sprite.Sprite.__init__(self)
-
-		#Load the picture
-		if Kind_of == "Heroes" :
-			#Motion of the Mac_Gyver icon
-			self.image, self.image_rect = map_generator.load_png("./ressource/MacGyver.png")
+	def __init__(self, who):
+		# Mac Gyver have a specific position on the screen
+		self.speed=1*map_generator.Sprite_size
+		if who=="Mac_Gyver":
+			#Position
+			self.pos_x_char =10*map_generator.Sprite_size
+			self.pos_y_char =10*map_generator.Sprite_size
+			#Icon
+			self.character_icon,self.character_icon_rect = map_generator.load_png("MacGyver.png")
 		else:
-			#Motion of the Guard icon
-			self.image, self.image_rect = map_generator.load_png("./ressource/Gardien.png")
+			#Position
+			self.pos_x_char =0
+			self.pos_y_char =0
+			#Icon
+			self.character_icon,self.character_icon_rect = map_generator.load_png("Gardien.png")
 		
-		screen = pygame.display.get_surface()
-		self.area = screen.get_rect()
-		self.speed = Sprite_size
-		#self.position='''
-		pass
-	'''	
-	def update(self):
-		pass
-		#newpos= 
-		
-	
 	def move_up(self):
+		#Character move up on the screen
 		print("Up")
+		self.new_pos_y_char= self.pos_y_char - self.speed
+		self.pos_y_char = stay_on_screen(self.pos_y_char,self.new_pos_y_char,self.speed)
 	
 	def move_down(self):
+		#Character move down on the screen
 		print("Down")
+		self.new_pos_y_char= self.pos_y_char + self.speed
+		self.pos_y_char = stay_on_screen(self.pos_y_char,self.new_pos_y_char,self.speed)
 		
 	def move_left(self):
+		#Character move left on the screen
 		print("Left")
+		self.new_pos_x_char= self.pos_x_char - self.speed
+		self.pos_x_char = stay_on_screen(self.pos_x_char,self.new_pos_x_char,self.speed)
 		
 	def move_right(self):
-		print("Right")
-		'''
-		
-def create_actors():
-	#images
-	global jungle,jungle_rect
-	
-	jungle=pygame.image.load("./ressource/tile-crusader-logo.png")
-	jungle=jungle.convert()
-	
-	jungle_rect=jungle.get_rect()
-	
-	#Mac Gyver icon
-	global mac_gyver,mac_gyver_rect
-	
-	mac_gyver = pygame.image.load("./ressource/MacGyver.png")
-	mac_gyver = mac_gyver.convert_alpha()
-	
-	mac_gyver_rect=mac_gyver.get_rect()
-	
-	mac_gyver_rect.center=((200,200))
-	
-	#Guard icon
-	global guard,guard_rect
-	
-	guard = pygame.image.load("./ressource/Gardien.png")
-	guard = guard.convert_alpha()
-	
-	guard_rect=guard.get_rect()
-	
-	guard_rect.bottom=height_screen
+		#Character move right on the screen
+		print("Right")		
+		self.new_pos_x_char= self.pos_x_char + self.speed
+		self.pos_x_char = stay_on_screen(self.pos_x_char,self.new_pos_x_char,self.speed)
 
-
-def action_event(event):
-	#Keyboard pressed
-	if event.type==pygame.KEYDOWN:
-		if event.key == pygame.K_SPACE:
-			print("Down")
-			sound.play()
+def stay_on_screen(init_position, new_position,move):
+	#Limit Character moves on negative axis
+	if new_position > (map_generator.side_square_screen_mesure*map_generator.Sprite_size-map_generator.Sprite_size):
+		position_into_screen = init_position
+	#Limit Character moves on negative axis
+	elif new_position < 0:
+		position_into_screen = init_position
+	else :
+		position_into_screen = new_position
 	
-	#Keyboard released
-	if event.type==pygame.KEYUP:
-		if event.key == pygame.K_SPACE:
-			print("Up")
-			music.play()
-
-
-def action_update (loc_delta):
-	mac_gyver_rect.x += 2
-	if mac_gyver_rect.left > width_screen:
-		mac_gyver_rect.left=0
-
-
-def action_render (loc_screen):
-	#Surface management
-	#background
-	loc_screen.blit(jungle,jungle_rect)
-	#Guard icon
-	loc_screen.blit(guard,guard_rect)
-	#Mac gyver icon
-	loc_screen.blit(mac_gyver,mac_gyver_rect)
+	return position_into_screen
 	
-	#Labels
-	label=myfont.render("Point=0",1,color_green)
-	loc_screen.blit(label,(10,10))
-	
-	#display the result
-	pygame.display.flip()
-
-
+def main():
+	pass
 	
 if __name__ == '__main__':
 	main()
