@@ -19,20 +19,20 @@ color_water=(0,206,209)
 #color_white=(255,255,255)
 
 MAZE =	[1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,
-		1,0,1,1,1,1,1,1,1,0,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+		 1,0,1,0,1,1,1,1,1,0,1,1,1,1,1,
+		 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+		 1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,
+		 1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,
+		 1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,
+		 1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,
+		 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+		 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
 class Monitor():
 	
@@ -66,24 +66,24 @@ class Monitor():
 		pygame.display.flip()
 		
 		#Wait a bit to show correctly the main screen - ms
-		pygame.time.delay(1000)
+		pygame.time.delay(000)
 
 	def fps_management(self):
 		#FPS Management
 		global clock
 		clock=pygame.time.Clock()
 		
-	def map_generator(self):
+	def map_init(self):
 		#Attributes
 		var_x=0
 		var_y=0
 		
 		#Load the path pattern
-		path_pattern,path_pattern_rect=load_png('MacGyver.png')
+		path_pattern,path_pattern_rect = self.Sprite_extract("floor-tiles-20x20.png")
 		#look into the maze
 		for i in range(0,side_square_screen_mesure*side_square_screen_mesure):
 			#Determine if 1 = Wall or 0 for nothing in the maze definition
-			if MAZE[var_x +var_y*side_square_screen_mesure]==1:
+			if MAZE[var_x +var_y*side_square_screen_mesure]==0:
 				self.screen.blit(path_pattern,(var_x*Sprite_size,var_y*Sprite_size))
 			
 			var_x+=1
@@ -97,6 +97,27 @@ class Monitor():
 				
 		#Show the results
 		self.display_on_screen()
+	
+	def Sprite_extract(self,Sprite_sheet_filename):
+		#Sprite size in Sprite_sheet_filname file
+		len_sprt_size = 20
+		
+		#Sprite position in Sprite_sheet_filname file
+		Pos_x = 0*len_sprt_size
+		Pos_y = 0*len_sprt_size
+		
+		#Load the sprite sheet
+		sprite_sheet,sprite_sheet_rect = load_png(Sprite_sheet_filename)
+
+		#Locate the sprite in the sprite sheet - Rect(left, top, width, height) -> Rect
+		sprite_sheet.set_clip(pygame.Rect(Pos_x, Pos_y, len_sprt_size, len_sprt_size))
+		
+		#Extract the sprite
+		sprit_icon = sprite_sheet.subsurface(sprite_sheet.get_clip())
+		sprit_icon= pygame.transform.smoothscale(sprit_icon,(Sprite_size,Sprite_size))
+		
+		return sprit_icon,sprit_icon.get_rect()
+		
 		
 def other():
 		#Path
@@ -194,7 +215,7 @@ def other():
 	
 	
 def load_png(name):
-	#Load a picture from the repertory RESSOURCES and return a picture object
+	#Load a picture from the repertory RESSOURCE and return a picture object
 	fullname=os.path.join('./ressource/', name)
 	print(fullname)
 	image = pygame.image.load(fullname)
@@ -205,20 +226,6 @@ def load_png(name):
 		image = image.convert_alpha()
 		
 	return image, image.get_rect()
-	
-
-def Sprite_extract(Sprite_sheet_filename,Pos_x,Pos_y):
-	#Load the sprite sheet
-	sprite_sheet = pygame.image.load(Sprite_sheet_filename)
-
-	sprite_sheet.set_clip(pygame.Rect(Pos_x, Pos_y, LEN_SPRT_X, LEN_SPRT_Y)) #Locate the sprite you want
-	draw_me = sheet.subsurface(sheet.get_clip()) #Extract the sprite you want
-
-	backdrop = pygame.Rect(0, 0, SCREEN_X, SCREEN_Y) #Create the whole screen so you can draw on it
-
-	screen.blit(draw_me,backdrop) #'Blit' on the backdrop
-	pygame.display.flip()
-	#Draw the sprite on the screen
 		
 		
 def main():

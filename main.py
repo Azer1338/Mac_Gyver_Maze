@@ -22,7 +22,7 @@ def Map_generation():
 	First_screen = map_generator.Monitor()
 	
 	#Creation of the map
-	First_screen.map_generator()
+	First_screen.map_init()
 
 
 def Character_generation():
