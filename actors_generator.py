@@ -11,16 +11,16 @@ class Character():
 		self.speed=1*map_generator.Sprite_size
 		if who=="Mac_Gyver":
 			#Position
-			self.pos_x_char =10*map_generator.Sprite_size
-			self.pos_y_char =10*map_generator.Sprite_size
+			self.pos_x_char =0*map_generator.Sprite_size
+			self.pos_y_char =4*map_generator.Sprite_size
 			#Icon
-			self.character_icon,self.character_icon_rect = map_generator.load_png("MacGyver.png")
+			self.character_icon,self.character_icon_rect = map_generator.load_png("MacGyver.png",False)
 		else:
 			#Position
-			self.pos_x_char =0
-			self.pos_y_char =0
+			self.pos_x_char =14*map_generator.Sprite_size
+			self.pos_y_char =4*map_generator.Sprite_size
 			#Icon
-			self.character_icon,self.character_icon_rect = map_generator.load_png("Gardien.png")
+			self.character_icon,self.character_icon_rect = map_generator.load_png("Gardien.png",False)
 		
 	def move_up(self):
 		#Character move up on the screen

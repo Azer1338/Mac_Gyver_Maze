@@ -37,15 +37,14 @@ class Monitor():
 		self.top_title_generation()
 		
 		#Initialize and update the background + maze
-		self.update_background_screen()
+		#self.update_background_screen()
 		
-	def update_background_screen(self):
+	def update_background_screen(self,maze):
 		#Fill background color
 		self.screen.fill(color_water)
 		
 		#Maze generation
-		maze_on_screen = maze_generator.Maze()
-		maze_on_screen.draw(self.screen,side_square_screen_mesure,Sprite_size)
+		maze.draw(self.screen,side_square_screen_mesure,Sprite_size)
 
 	def top_title_generation (self):
 		#Definition of the main screen title
@@ -73,7 +72,7 @@ def Sprite_extract(Sprite_sheet_filename):
 	Pos_y = 0*len_sprt_size
 	
 	#Load the sprite sheet
-	sprite_sheet,sprite_sheet_rect = load_png(Sprite_sheet_filename)
+	sprite_sheet,sprite_sheet_rect = load_png(Sprite_sheet_filename,True)
 
 	#Locate the sprite in the sprite sheet - Rect(left, top, width, height) -> Rect
 	sprite_sheet.set_clip(pygame.Rect(Pos_x, Pos_y, len_sprt_size, len_sprt_size))
@@ -86,7 +85,7 @@ def Sprite_extract(Sprite_sheet_filename):
 		
 		
 	
-def load_png(name):
+def load_png(name,from_sprite_sheet):
 	#Load a picture from the repertory RESSOURCE and return a picture object
 	fullname=os.path.join('./ressource/', name)
 	image = pygame.image.load(fullname)
@@ -95,6 +94,10 @@ def load_png(name):
 		image = image.convert()
 	else:
 		image = image.convert_alpha()
+		
+	#Adjust the image if it is not coming from a sprite sheet
+	if from_sprite_sheet == False:
+		image = pygame.transform.smoothscale(image,(Sprite_size,Sprite_size))
 	
 	return image, image.get_rect()
 		
