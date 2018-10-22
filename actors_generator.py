@@ -24,25 +24,21 @@ class Character():
 		
 	def move_up(self):
 		#Character move up on the screen
-		print("Up")
 		self.new_pos_y_char= self.pos_y_char - self.speed
 		self.pos_y_char = stay_on_screen(self.pos_y_char,self.new_pos_y_char,self.speed)
 	
 	def move_down(self):
 		#Character move down on the screen
-		print("Down")
 		self.new_pos_y_char= self.pos_y_char + self.speed
 		self.pos_y_char = stay_on_screen(self.pos_y_char,self.new_pos_y_char,self.speed)
 		
 	def move_left(self):
 		#Character move left on the screen
-		print("Left")
 		self.new_pos_x_char= self.pos_x_char - self.speed
 		self.pos_x_char = stay_on_screen(self.pos_x_char,self.new_pos_x_char,self.speed)
 		
 	def move_right(self):
-		#Character move right on the screen
-		print("Right")		
+		#Character move right on the screen	
 		self.new_pos_x_char= self.pos_x_char + self.speed
 		self.pos_x_char = stay_on_screen(self.pos_x_char,self.new_pos_x_char,self.speed)
 

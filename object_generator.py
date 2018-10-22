@@ -29,12 +29,8 @@ class Object():
 
 	def object_on_path(self,matrix):
 		#Check if the object is yes or not on the path
-		print("Avant: x={} , y ={}".format(self.pos_x_obj_matrix,self.pos_y_obj_matrix))
 		while matrix[self.pos_y_obj_matrix][self.pos_x_obj_matrix] == 1:
 			self.random_position()
-			print("Provide antoher position? Apres: x={} , y ={}".format(self.pos_x_obj_matrix,self.pos_y_obj_matrix))
-		print("Final position: x={} , y ={}".format(self.pos_x_obj_matrix,self.pos_y_obj_matrix))	
-		
 			
 	def random_position(self):
 		#Attribute a number between 0 and the max values on axes
