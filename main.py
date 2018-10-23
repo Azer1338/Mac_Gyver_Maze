@@ -2,39 +2,49 @@
 
 import pygame
 
-import sound_management
-import map_generator
-import maze_generator
-import label_generator
-import actors_generator
+import sound_generator
+import screen_generator
+import path_generator
 import object_generator
+'''
+import character_generator
+
+'''
 
 from sys import exit
-
-
-def Sound_generation():
-	#Launch of the music sound
-	pygame.mixer.init()
-	sound_management.activation_music()
-	#sound_management.activation_sound()
-		
-def update_screen(Screen_to_update,maze,character1,character2,object1,object2,object3,object4):
-	#Update the screen with the position of the path
-	Screen_to_update.update_background_screen(maze)
-	
-	#Update the screen with the position of Characters
-	Screen_to_update.screen.blit(character1.character_icon,(character1.pos_x_char,character1.pos_y_char))
-	Screen_to_update.screen.blit(character2.character_icon,(character2.pos_x_char,character2.pos_y_char))
-	
-	#Update the screen with the position of the object
-	Screen_to_update.screen.blit(object1.object_icon,(object1.pos_x_obj,object1.pos_y_obj))
-	Screen_to_update.screen.blit(object2.object_icon,(object2.pos_x_obj,object2.pos_y_obj))
-	Screen_to_update.screen.blit(object3.object_icon,(object3.pos_x_obj,object3.pos_y_obj))
-	Screen_to_update.screen.blit(object4.object_icon,(object4.pos_x_obj,object4.pos_y_obj))
-	Screen_to_update.display_on_screen()
-	pass
 	
 def main():
+	
+	#Generation of a background music
+	Music = sound_generator.Music_Sound()
+	Music.background_music("ON")
+	
+	#Generation of a sound
+	Sound_drum = sound_generator.Music_Sound()
+	Sound_drum.BomBomBom()
+	
+	#Generation of the Game screen
+	Game_screen = screen_generator.Screen_Monitor()
+	
+	#Generation of the path (maze)
+	Maze_path = path_generator.Maze_builder()
+	Game_screen.draw_path(Maze_path)
+	
+	#Generation of the object to pick up
+	Needle = object_generator.Object_builder("Needle")
+	Tube = object_generator.Object_builder("Tube")
+	Ether = object_generator.Object_builder("Ether")
+	#Generation of a 
+	
+	'''
+	#Generation of the actors
+	Mac_gyver = character_generator.Player()
+	Guard = character_generator.Player()
+	
+	#
+	
+	
+	
 	
 	#Sound Generation
 	Sound_generation()
@@ -61,13 +71,18 @@ def main():
 	tube_on_screen.object_on_path(maze_on_screen.maze_matrix)
 	ether_on_screen.object_on_path(maze_on_screen.maze_matrix)
 	
+	'''
 	#Infinity loop to catch the player moves and regenerate the maze
 	infinity_loop = True
+	
+	#TEST
+	Mur=pygame.Rect((0,0),(1,1))
 	
 	#Launch the loop
 	while infinity_loop == True:
 		#update the screen
-		update_screen(First_screen,maze_on_screen,player_on_screen,guard_on_screen,needle_on_screen,syringe_on_screen,tube_on_screen,ether_on_screen)
+		pygame.display.flip()
+		#update_screen(First_screen,maze_on_screen,player_on_screen,guard_on_screen,needle_on_screen,syringe_on_screen,tube_on_screen,ether_on_screen)
 		
 		#Exit screen 
 		for evt in pygame.event.get():
@@ -89,8 +104,8 @@ def main():
 				if evt.key == pygame.K_SPACE:
 					print("0")
 
+
 	return 0
 	
-
 if __name__ == '__main__':
 	main()
