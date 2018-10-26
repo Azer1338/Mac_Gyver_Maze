@@ -2,6 +2,7 @@
 
 import pygame
 import os
+import numpy
 
 import Tile
 
@@ -65,13 +66,35 @@ class Screen_Monitor():
 		#Replace number par OBJ_ICON name
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
-				 self.screen_maze_matrix[j][i] = Screen_Monitor.OBJ_ICON[self.screen_maze_matrix[j][i]]
+				self.screen_maze_matrix[i][j] = Screen_Monitor.OBJ_ICON[self.screen_maze_matrix[i][j]]
+							
+		#Copy paste
+		self.screen_maze_matrix_updated = self.screen_maze_matrix
 		
-	def update_screen(self):	
+		#Affichage sur ecran
+		pygame.display.flip()
+		
+	def initalise_screen(self):		
 		#First : Background tiles
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
-					self.draw(Tile.Tile(self.screen_maze_matrix[j][i],i ,j))
+				self.draw(Tile.Tile(self.screen_maze_matrix_updated[i][j],i,j))
+
+		#Affichage sur ecran
+		pygame.display.flip()
+		
+	def update_screen(self):		
+		#First : Background tiles		
+		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
+			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
+				self.draw(Tile.Tile(self.screen_maze_matrix_updated[i][j],i,j))
+
+				
+				
+		#print("Saut de ligne /n {}".format(numpy.array(self.screen_maze_matrix)))
+					
+		#Affichage sur ecran
+		pygame.display.flip()
 
 	def draw(self,object_to_draw):
 	
@@ -85,7 +108,4 @@ class Screen_Monitor():
 		
 		#Add a image of the object on the cell (var_x, var_y)
 		self.screen.blit(pattern,(rect_x*Screen_Monitor.SPRITE_SIZE,rect_y*Screen_Monitor.SPRITE_SIZE))
-		
-		#Affichage sur ecran
-		pygame.display.flip()
-	
+			

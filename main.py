@@ -37,6 +37,9 @@ def main():
 	Mac_Gyver = Player.Player("Mac_Gyver",Game_screen)
 	Guard = Player.Player("Guard",Game_screen)
 	
+	#Initialize the screen
+	Game_screen.initalise_screen()
+	
 	#Infinity loop to catch the player moves and regenerate the maze
 	infinity_loop = True
 	
@@ -44,7 +47,6 @@ def main():
 	while infinity_loop == True:
 		#update the screen
 		Game_screen.fps_management()
-		Game_screen.update_screen()
 		
 		#Exit screen 
 		for evt in pygame.event.get():
@@ -57,16 +59,16 @@ def main():
 					infinity_loop=False
 				#Move on screen
 				if evt.key == pygame.K_UP:
-					Mac_Gyver.move_up()
+					Mac_Gyver.move_up(Game_screen)
 				if evt.key == pygame.K_DOWN:
-					Mac_Gyver.move_down()
+					Mac_Gyver.move_down(Game_screen)
 				if evt.key == pygame.K_LEFT:
-					Mac_Gyver.move_left()
+					Mac_Gyver.move_left(Game_screen)
 				if evt.key == pygame.K_RIGHT:
-					Mac_Gyver.move_right()
+					Mac_Gyver.move_right(Game_screen)
 				if evt.key == pygame.K_SPACE:
 					print("0")
-
+				Game_screen.update_screen()
 
 	return 0
 	

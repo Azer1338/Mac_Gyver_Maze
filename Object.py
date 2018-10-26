@@ -21,10 +21,10 @@ class Object():
 		self.random_position()
 		
 		#Make sure that the object are on the road
-		self.object_on_path(screen.screen_maze_matrix)
+		self.object_on_path(screen.screen_maze_matrix_updated)
 		
 		#Insertion of the objects in the screen matrix
-		screen.screen_maze_matrix[self.pos_x_matrix][self.pos_y_matrix] = what
+		screen.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = what
 		
 	def random_position(self):
 		#Attribute a number between 0 and the max values on axes
