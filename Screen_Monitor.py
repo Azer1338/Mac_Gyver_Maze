@@ -18,8 +18,6 @@ class Screen_Monitor():
 	HEIGHT_SCREEN=SPRITE_SIZE*LENGTH_PER_SIDE
 	#Frame Per Screen
 	FPS= 25
-	#Color definition
-	COLOR_WATER=(0,206,209)
 	
 	#Dictonnary Number on maze - Obj
 	OBJ_ICON =	{ 	0	:	"Path",
@@ -43,10 +41,10 @@ class Screen_Monitor():
 		#Creation of the gaming screen
 		self.screen = pygame.display.set_mode((self.WIDTH_SCREEN,self.HEIGHT_SCREEN))
 		
-		#Top Title Generation
+		#Top title generation
 		self.top_title_generation()
 		
-		#FPS
+		#FPS initialisation
 		self.fps_management_init()
 
 	def top_title_generation (self):
@@ -58,24 +56,25 @@ class Screen_Monitor():
 		self.clock = pygame.time.Clock()
 		
 	def fps_management(self):
+		#Check the FPS at every screen update
 		self.clock.tick(Screen_Monitor.FPS)
 
 	def load_matrix(self, matrix):
-		#Copy paste of the initial maze
-		self.screen_maze_matrix = matrix.maze_matrix
+		#Initialise a proper maze_matrix for futures modifications
+		self.screen_maze_matrix = [[0]*Screen_Monitor.LENGTH_PER_SIDE for i in range(Screen_Monitor.LENGTH_PER_SIDE)]
+		#Copy paste initial maze_matrix to maze_matrix in order
+		self.screen_maze_matrix_updated = [[0]*Screen_Monitor.LENGTH_PER_SIDE for i in range(Screen_Monitor.LENGTH_PER_SIDE)]
 		
-		#Replace number par OBJ_ICON name
+		#Replace number par OBJ_ICON name - minus 1 to respect the dimension of the table
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
-				self.screen_maze_matrix[i][j] = Screen_Monitor.OBJ_ICON[self.screen_maze_matrix[i][j]]
-							
-		#Copy paste
-		self.screen_maze_matrix_updated= self.screen_maze_matrix
-		
+				self.screen_maze_matrix[i][j] = Screen_Monitor.OBJ_ICON[matrix.maze_matrix[i][j]]
+				self.screen_maze_matrix_updated[i][j] = Screen_Monitor.OBJ_ICON[matrix.maze_matrix[i][j]]
+
 		#Affichage sur ecran
 		pygame.display.flip()
 		
-	def initalise_screen(self):		
+	def initialise_screen(self):		
 		#First : Background tiles
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
@@ -84,11 +83,18 @@ class Screen_Monitor():
 		#Affichage sur ecran
 		pygame.display.flip()
 		
-	def update_screen(self):		
+	def update_screen(self):
+		#FPS management
+		self.fps_management_init()	
+		
 		#First : Background tiles		
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
-				self.draw(Tile.Tile(self.screen_maze_matrix_updated[i][j],i,j))
+				if self.screen_maze_matrix_updated[i][j] != self.screen_maze_matrix[i][j]:
+					print("{} - Fuck you - {}".format(self.screen_maze_matrix_updated[i][j],self.screen_maze_matrix[i][j]))
+					self.draw(Tile.Tile(self.screen_maze_matrix_updated[i][j],i,j))
+					#Make sure that the loop will be use for modification only
+				self.screen_maze_matrix_updated[i][j] = self.screen_maze_matrix[i][j]
 					
 		#Affichage sur ecran
 		pygame.display.flip()
@@ -121,7 +127,6 @@ class Screen_Monitor():
 		self.screen.blit(backpack_player, (300, 300))
 		
 		#Let the screen visible during few seconds		
-		pygame.time.delay(10000)
 		pygame.display.flip()
 		
 	def game_over_display(self):
@@ -136,5 +141,5 @@ class Screen_Monitor():
 		self.screen.blit(Victory_title, (300, 300))
 		
 		#Let the screen visible during few seconds		
-		pygame.time.delay(10000)
 		pygame.display.flip()
+		pygame.time.delay(10)

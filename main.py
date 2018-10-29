@@ -24,7 +24,7 @@ def main():
 	Game_screen = Screen_Monitor.Screen_Monitor()
 	
 	#Generation of the path (maze)
-	Maze_path = Maze.Maze(Game_screen)
+	Maze_path = Maze.Maze()
 	#Load the inital maze in the Screen
 	Game_screen.load_matrix(Maze_path)
 	
@@ -33,31 +33,33 @@ def main():
 	Tube = Object.Object("Tube",Game_screen)
 	Ether = Object.Object("Ether",Game_screen)
 	
-	#Generation of the actors
+	#Generation of the Characters
 	Mac_Gyver = Player.Player("Mac_Gyver",Game_screen)
 	Guard = Player.Player("Guard",Game_screen)
 	
 	#Initialize the screen
-	Game_screen.initalise_screen()
+	Game_screen.initialise_screen()
 	
 	#Infinity loop to catch the player moves and regenerate the maze
 	infinity_loop = True
 	
 	#Launch the loop
 	while infinity_loop == True:
-		#update the screen
-		Game_screen.fps_management()
 		
 		#Exit screen 
 		for evt in pygame.event.get():
+			
 			#Screen Exit - X on the top right of the screen
 			if evt.type == pygame.QUIT:
 				infinity_loop=False
+				
 			#Keyboard pressed
 			if evt.type==pygame.KEYDOWN:
+				# ESC key - Exit
 				if evt.key == pygame.K_ESCAPE:
 					infinity_loop=False
-				#Move on screen
+					
+				#Player moves
 				if evt.key == pygame.K_UP:
 					Mac_Gyver.move_up(Game_screen)
 				if evt.key == pygame.K_DOWN:
@@ -66,11 +68,18 @@ def main():
 					Mac_Gyver.move_left(Game_screen)
 				if evt.key == pygame.K_RIGHT:
 					Mac_Gyver.move_right(Game_screen)
+				
+				#Backpack display
 				if evt.key == pygame.K_SPACE:
 					Game_screen.display_backpack(Mac_Gyver, Game_screen)
-					
-				Game_screen.update_screen()
-
+		
+		#Check if the game is finished, if not, update the screen
+		if Game_screen.victory_game == True : 
+			Game_screen.game_over_display()
+			infinity_loop=False
+		else:
+			Game_screen.update_screen()
+		
 	return 0
 	
 if __name__ == '__main__':

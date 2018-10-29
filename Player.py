@@ -34,7 +34,7 @@ class Player():
 		self.length_side_on_screen = screen.LENGTH_PER_SIDE - 1
 		
 		#Display the player on screen
-		screen.screen_maze_matrix[self.pos_x_matrix][self.pos_y_matrix] = self.perso
+		screen.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
 		
 	def move_up(self,screen):
 		#Character move up on the screen
@@ -122,6 +122,8 @@ class Player():
 				self.backpack.append(self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice])
 					
 			#Replace the actual tile by a path
+			print("Path:{},{}".format(self.pos_x_matrix, self.pos_y_matrix))
+			print("Player:{},{}".format(Xpos_in_matrice,Ypos_in_matrice))
 			self.screen_to_display.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = "Path"
 			
 			#Swap the new position with actual position
