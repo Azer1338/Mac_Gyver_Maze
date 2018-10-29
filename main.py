@@ -67,7 +67,8 @@ def main():
 				if evt.key == pygame.K_RIGHT:
 					Mac_Gyver.move_right(Game_screen)
 				if evt.key == pygame.K_SPACE:
-					print("0")
+					Game_screen.display_backpack(Mac_Gyver, Game_screen)
+					
 				Game_screen.update_screen()
 
 	return 0

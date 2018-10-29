@@ -34,7 +34,7 @@ class Player():
 		self.length_side_on_screen = screen.LENGTH_PER_SIDE - 1
 		
 		#Display the player on screen
-		screen.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
+		screen.screen_maze_matrix[self.pos_x_matrix][self.pos_y_matrix] = self.perso
 		
 	def move_up(self,screen):
 		#Character move up on the screen
@@ -78,8 +78,7 @@ class Player():
 		
 		#Event during walking on the way to go home
 		if new_position != self.pos_x_matrix:
-			self.action_on_motion("X",new_position)
-			
+			self.action_on_motion("X",new_position)	
 		
 	def stay_in_frame (self, new_pos, init_pos):
 		#If move out of frame
@@ -102,23 +101,25 @@ class Player():
 		
 	def Check_next_tile(self, Xpos_in_matrice, Ypos_in_matrice):
 		
-		if self.screen_to_display.screen_maze_matrix_updated[Xpos_in_matrice][Ypos_in_matrice] == "Wall" :
+		if self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice] == "Wall" :
 			print("/!\ Wall")
 			print ("")
 			Xpos_in_matrice = self.pos_x_matrix
 			Ypos_in_matrice = self.pos_y_matrix
 			
 		else:
-			if self.screen_to_display.screen_maze_matrix_updated[Xpos_in_matrice][Ypos_in_matrice] == "Path" :
+			if self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice] == "Path" :
+				#No actions
 				pass
 				
-			elif self.screen_to_display.screen_maze_matrix_updated[Xpos_in_matrice][Ypos_in_matrice] == "Guard" :
-				
-				print("Game-over")
+			elif self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice] == "Guard" :
+				#Backpack check
+				self.screen_to_display.victory_game = self.check_backpack_content()
+				pass
 				
 			else: #An object
 				#Add the object in the backpack
-				self.backpack.append(self.screen_to_display.screen_maze_matrix_updated[Xpos_in_matrice][Ypos_in_matrice])
+				self.backpack.append(self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice])
 					
 			#Replace the actual tile by a path
 			self.screen_to_display.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = "Path"
@@ -131,3 +132,16 @@ class Player():
 			self.screen_to_display.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
 			
 			print(self.backpack)
+			
+	def check_backpack_content(self):
+		#Verify if 3 elements are in the backpack
+		if len(self.backpack) == 3:
+			victory = True
+			print("Game Over")
+		else :
+			victory = False
+			print("At least 1 thing is missing")
+			
+		return victory
+			
+			

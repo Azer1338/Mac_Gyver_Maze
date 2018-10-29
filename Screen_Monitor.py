@@ -35,6 +35,7 @@ class Screen_Monitor():
 	def __init__(self):
 		#Attribute
 		self.screen = None
+		self.victory_game = False
 	
 		#Initialisation of the pygame library
 		pygame.init()
@@ -69,7 +70,7 @@ class Screen_Monitor():
 				self.screen_maze_matrix[i][j] = Screen_Monitor.OBJ_ICON[self.screen_maze_matrix[i][j]]
 							
 		#Copy paste
-		self.screen_maze_matrix_updated = self.screen_maze_matrix
+		self.screen_maze_matrix_updated= self.screen_maze_matrix
 		
 		#Affichage sur ecran
 		pygame.display.flip()
@@ -78,7 +79,7 @@ class Screen_Monitor():
 		#First : Background tiles
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
-				self.draw(Tile.Tile(self.screen_maze_matrix_updated[i][j],i,j))
+				self.draw(Tile.Tile(self.screen_maze_matrix[i][j],i,j))
 
 		#Affichage sur ecran
 		pygame.display.flip()
@@ -88,13 +89,13 @@ class Screen_Monitor():
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 				self.draw(Tile.Tile(self.screen_maze_matrix_updated[i][j],i,j))
-
-				
-				
-		#print("Saut de ligne /n {}".format(numpy.array(self.screen_maze_matrix)))
 					
 		#Affichage sur ecran
 		pygame.display.flip()
+		
+		#Verify the victory
+		if self.victory_game == True : 
+			self.game_over_display()
 
 	def draw(self,object_to_draw):
 	
@@ -109,3 +110,31 @@ class Screen_Monitor():
 		#Add a image of the object on the cell (var_x, var_y)
 		self.screen.blit(pattern,(rect_x*Screen_Monitor.SPRITE_SIZE,rect_y*Screen_Monitor.SPRITE_SIZE))
 			
+	def display_backpack(self,player,screen):
+		
+		#Fill the screen with a single color
+		self.screen.fill((100,110,150))
+		
+		#Write the player s backpack content
+		font = pygame.font.Font(None, 24)
+		backpack_player = font.render(str(numpy.array(player.backpack)),1,(255,255,255))
+		self.screen.blit(backpack_player, (300, 300))
+		
+		#Let the screen visible during few seconds		
+		pygame.time.delay(10000)
+		pygame.display.flip()
+		
+	def game_over_display(self):
+		#Fill the screen with a single color
+		self.screen.fill((100,0,150))
+		
+		#Write the player s backpack content
+		font = pygame.font.Font(None, 24)
+		Game_over_title = font.render("GAME-OVER",1,(255,255,255))
+		Victory_title = font.render("VICTORY",1,(255,255,255))
+		self.screen.blit(Game_over_title, (300, 500))
+		self.screen.blit(Victory_title, (300, 300))
+		
+		#Let the screen visible during few seconds		
+		pygame.time.delay(10000)
+		pygame.display.flip()

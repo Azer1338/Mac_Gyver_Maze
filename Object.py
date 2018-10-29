@@ -21,10 +21,10 @@ class Object():
 		self.random_position()
 		
 		#Make sure that the object are on the road
-		self.object_on_path(screen.screen_maze_matrix_updated)
+		self.object_on_path(screen.screen_maze_matrix)
 		
 		#Insertion of the objects in the screen matrix
-		screen.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = what
+		screen.screen_maze_matrix[self.pos_x_matrix][self.pos_y_matrix] = what
 		
 	def random_position(self):
 		#Attribute a number between 0 and the max values on axes
@@ -33,5 +33,5 @@ class Object():
 		
 	def object_on_path(self,matrix):
 		#Make sure the object will be on the path (available space)
-		while not matrix[self.pos_y_matrix][self.pos_x_matrix] == "Path":
+		while matrix[self.pos_x_matrix][self.pos_y_matrix] != "Path":
 			self.random_position()
