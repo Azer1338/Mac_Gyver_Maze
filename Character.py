@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pygame
-import Maze
-import numpy
-
-import Tile
-
+import Music_Sound
 
 class Character():	
 	#Class Attributes
@@ -121,8 +117,6 @@ class Character():
 			#Place the Character on the new position
 			self.screen_to_display.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
 			
-			print(self.backpack)
-			
 	def check_backpack_content(self):
 		#Verify if 3 elements are in the characters' backpack
 		#Send back the status of the game depending of the status
@@ -135,3 +129,7 @@ class Character():
 	def add_backpack_content(self, obj):
 		#Add an object in the backpack
 		self.backpack.append(obj)
+		
+		#Make a sound to celebrate that!
+		Drum = Music_Sound.Music_Sound()
+		Drum.BomBomBom()

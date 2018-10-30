@@ -15,11 +15,7 @@ def main():
 	#Generation of a background music
 	Music = Music_Sound.Music_Sound()
 	Music.background_music("ON")
-	
-	#Generation of a sound
-	Sound_drum = Music_Sound.Music_Sound()
-	#Sound_drum.BomBomBom()
-	
+		
 	#Generation of the Game screen
 	Game_screen = Screen_Monitor.Screen_Monitor()
 	
@@ -77,6 +73,7 @@ def main():
 		if Game_screen.status_game != "On Going": 
 			#Game over - Display the ending screen
 			Game_screen.ending_display()
+			
 			infinity_loop = False
 			
 		else:
