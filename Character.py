@@ -7,7 +7,7 @@ import numpy
 import Tile
 
 
-class Player():	
+class Character():	
 	#Class Attributes
 	SPEED = 1
 	
@@ -20,25 +20,25 @@ class Player():
 		#Initialisation of the backpack
 		self.backpack = []
 		
-		#Initial position of the icon
-		if who == "Mac_Gyver":
-			#Position
-			self.pos_x_matrix =11
-			self.pos_y_matrix =8
-		else:
-			#Position
-			self.pos_x_matrix =13
-			self.pos_y_matrix =13
+		#Initial position of the icon in the maze matrix
+		#Retain the pos x & y of the Character
+		for i in range(0,self.screen_to_display.LENGTH_PER_SIDE):
+			for j in range(0,self.screen_to_display.LENGTH_PER_SIDE):
+				if self.screen_to_display.screen_maze_matrix[j][i] == who:
+					#Position
+					self.pos_x_matrix = j
+					self.pos_y_matrix = i
+					print(self.pos_x_matrix,self.pos_y_matrix)
 		
 		#Mesure of the matrix per side
 		self.length_side_on_screen = screen.LENGTH_PER_SIDE - 1
 		
-		#Display the player on screen
+		#Display the Character on screen
 		screen.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
 		
 	def move_up(self,screen):
 		#Character move up on the screen
-		move = self.pos_y_matrix - Player.SPEED
+		move = self.pos_y_matrix - Character.SPEED
 		
 		#Stay in the screen
 		new_position= self.stay_in_frame(move,self.pos_y_matrix)
@@ -49,7 +49,7 @@ class Player():
 
 	def move_down(self,screen):
 		#Character move down on the screen
-		move = self.pos_y_matrix + Player.SPEED
+		move = self.pos_y_matrix + Character.SPEED
 		
 		#Stay in the screen
 		new_position= self.stay_in_frame(move,self.pos_y_matrix)
@@ -60,7 +60,7 @@ class Player():
 			
 	def move_left(self,screen):
 		#Character move left on the screen
-		move = self.pos_x_matrix - Player.SPEED
+		move = self.pos_x_matrix - Character.SPEED
 		
 		#Stay in the screen
 		new_position= self.stay_in_frame(move,self.pos_x_matrix)
@@ -71,7 +71,7 @@ class Player():
 		
 	def move_right(self,screen):
 		#Character move right on the screen	
-		move = self.pos_x_matrix + Player.SPEED
+		move = self.pos_x_matrix + Character.SPEED
 		
 		#Stay in the screen
 		new_position = self.stay_in_frame(move,self.pos_x_matrix)
@@ -88,8 +88,8 @@ class Player():
 		return new_pos
 			
 	def action_on_motion(self, axis, new_position):
-		#On the next tile, the player can find:
-		#If Wall, the player could go there. Stay on same tile		
+		#On the next tile, the Character can find:
+		#If Wall, the Character could go there. Stay on same tile		
 		if axis == "X" :
 			self.Check_next_tile(new_position, self.pos_y_matrix)
 			
@@ -130,20 +130,19 @@ class Player():
 			self.pos_x_matrix = Xpos_in_matrice
 			self.pos_y_matrix = Ypos_in_matrice
 			
-			#Place the player on the new position
+			#Place the Character on the new position
 			self.screen_to_display.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
 			
 			print(self.backpack)
 			
 	def check_backpack_content(self):
-		#Verify if 3 elements are in the backpack
+		#Verify if 3 elements are in the characters' backpack
 		if len(self.backpack) == 3:
-			victory = True
-			print("Game Over")
+			condition = "Victory"
+
 		else :
-			victory = False
-			print("At least 1 thing is missing")
+			condition = "LOSER : At least 1 thing is missing"
 			
-		return victory
+		return condition
 			
 			

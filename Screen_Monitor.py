@@ -33,7 +33,7 @@ class Screen_Monitor():
 	def __init__(self):
 		#Attribute
 		self.screen = None
-		self.victory_game = False
+		self.victory_game = "On Going"
 	
 		#Initialisation of the pygame library
 		pygame.init()
@@ -68,18 +68,18 @@ class Screen_Monitor():
 		#Replace number par OBJ_ICON name - minus 1 to respect the dimension of the table
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
-				self.screen_maze_matrix[i][j] = Screen_Monitor.OBJ_ICON[matrix.maze_matrix[i][j]]
-				self.screen_maze_matrix_updated[i][j] = Screen_Monitor.OBJ_ICON[matrix.maze_matrix[i][j]]
-
+				self.screen_maze_matrix[j][i] = Screen_Monitor.OBJ_ICON[matrix.maze_matrix[i][j]]
+				self.screen_maze_matrix_updated[j][i] = Screen_Monitor.OBJ_ICON[matrix.maze_matrix[i][j]]
+		
 		#Affichage sur ecran
 		pygame.display.flip()
 		
 	def initialise_screen(self):		
-		#First : Background tiles
+		#Generate and display all background tiles + Characters
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
-				self.draw(Tile.Tile(self.screen_maze_matrix[i][j],i,j))
-
+				self.draw(Tile.Tile(self.screen_maze_matrix[j][i]),j,i)
+				
 		#Affichage sur ecran
 		pygame.display.flip()
 		
@@ -87,59 +87,63 @@ class Screen_Monitor():
 		#FPS management
 		self.fps_management_init()	
 		
-		#First : Background tiles		
+		#Compare every tiles in order to determine which one was modified	
 		for i in range(0,Screen_Monitor.LENGTH_PER_SIDE):
 			for j in range(0,Screen_Monitor.LENGTH_PER_SIDE):
-				if self.screen_maze_matrix_updated[i][j] != self.screen_maze_matrix[i][j]:
-					print("{} - Fuck you - {}".format(self.screen_maze_matrix_updated[i][j],self.screen_maze_matrix[i][j]))
-					self.draw(Tile.Tile(self.screen_maze_matrix_updated[i][j],i,j))
-					#Make sure that the loop will be use for modification only
-				self.screen_maze_matrix_updated[i][j] = self.screen_maze_matrix[i][j]
+				if self.screen_maze_matrix[j][i] != self.screen_maze_matrix_updated[j][i] :
+					self.draw(Tile.Tile(self.screen_maze_matrix_updated[j][i]),j,i)
+				
+				#Upload the matrix reference
+				self.screen_maze_matrix[j][i] = self.screen_maze_matrix_updated[j][i]
 					
 		#Affichage sur ecran
 		pygame.display.flip()
-		
-		#Verify the victory
-		if self.victory_game == True : 
-			self.game_over_display()
 
-	def draw(self,object_to_draw):
+	def draw(self,object_to_draw, pos_x_in_matrix, pos_y_in_matrix):
 	
 		#Load the pattern to draw
 		pattern = object_to_draw.img_pattern
 		pattern = pygame.transform.scale(pattern,(Screen_Monitor.SPRITE_SIZE,Screen_Monitor.SPRITE_SIZE))
 		
-		#x, y of the rectangle
-		rect_x = object_to_draw.pos_x_matrix
-		rect_y = object_to_draw.pos_y_matrix
-		
-		#Add a image of the object on the cell (var_x, var_y)
-		self.screen.blit(pattern,(rect_x*Screen_Monitor.SPRITE_SIZE,rect_y*Screen_Monitor.SPRITE_SIZE))
+		#Add a image of the object on the cell (pos_x, pos_y)
+		self.screen.blit(pattern,(pos_x_in_matrix*Screen_Monitor.SPRITE_SIZE, pos_y_in_matrix*Screen_Monitor.SPRITE_SIZE))
 			
 	def display_backpack(self,player,screen):
+		#Create a new screen
+		self.screen_backpack = pygame.display.set_mode((self.WIDTH_SCREEN,self.HEIGHT_SCREEN))
 		
 		#Fill the screen with a single color
-		self.screen.fill((100,110,150))
+		self.screen_backpack.fill((100,110,150))
 		
 		#Write the player s backpack content
 		font = pygame.font.Font(None, 24)
 		backpack_player = font.render(str(numpy.array(player.backpack)),1,(255,255,255))
-		self.screen.blit(backpack_player, (300, 300))
+		self.screen_backpack.blit(backpack_player, (300, 300))
 		
 		#Let the screen visible during few seconds		
 		pygame.display.flip()
 		
-	def game_over_display(self):
+		pygame.time.delay(10000)
+		
+		self.initialise_screen()
+		
+	def ending_display(self):
+		#Create a new screen
+		self.ending_screen = pygame.display.set_mode((self.WIDTH_SCREEN,self.HEIGHT_SCREEN))
+		
 		#Fill the screen with a single color
-		self.screen.fill((100,0,150))
+		self.ending_screen.fill((100,0,150))
 		
 		#Write the player s backpack content
 		font = pygame.font.Font(None, 24)
 		Game_over_title = font.render("GAME-OVER",1,(255,255,255))
-		Victory_title = font.render("VICTORY",1,(255,255,255))
-		self.screen.blit(Game_over_title, (300, 500))
-		self.screen.blit(Victory_title, (300, 300))
+		self.ending_screen.blit(Game_over_title, (self.WIDTH_SCREEN/2 -75, self.HEIGHT_SCREEN/2))
+		
+		#Display the VICTORY or LOSER player's status
+		ending_title = font.render(str(self.victory_game),1,(255,255,255))
+			
+		self.ending_screen.blit(ending_title, (self.WIDTH_SCREEN/2 - 50, self.HEIGHT_SCREEN/2 + 100))
 		
 		#Let the screen visible during few seconds		
 		pygame.display.flip()
-		pygame.time.delay(10)
+		pygame.time.delay(3000)

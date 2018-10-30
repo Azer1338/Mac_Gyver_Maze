@@ -7,7 +7,7 @@ import Music_Sound
 import Screen_Monitor
 import Maze
 import Object
-import Player
+import Character
 
 	
 def main():
@@ -27,16 +27,16 @@ def main():
 	Maze_path = Maze.Maze()
 	#Load the inital maze in the Screen
 	Game_screen.load_matrix(Maze_path)
-	
+
 	#Generation of the object to pick up
 	Needle = Object.Object("Needle",Game_screen)
 	Tube = Object.Object("Tube",Game_screen)
 	Ether = Object.Object("Ether",Game_screen)
 	
 	#Generation of the Characters
-	Mac_Gyver = Player.Player("Mac_Gyver",Game_screen)
-	Guard = Player.Player("Guard",Game_screen)
-	
+	Mac_Gyver = Character.Character("Mac_Gyver",Game_screen)
+	Guard = Character.Character("Guard",Game_screen)
+
 	#Initialize the screen
 	Game_screen.initialise_screen()
 	
@@ -73,13 +73,16 @@ def main():
 				if evt.key == pygame.K_SPACE:
 					Game_screen.display_backpack(Mac_Gyver, Game_screen)
 		
-		#Check if the game is finished, if not, update the screen
-		if Game_screen.victory_game == True : 
-			Game_screen.game_over_display()
-			infinity_loop=False
+		#Check if the game is finished
+		if Game_screen.victory_game != "On Going": 
+			#Game over - Display the ending screen
+			Game_screen.ending_display()
+			infinity_loop = False
+			
 		else:
+			#Keep going the screen updating
 			Game_screen.update_screen()
-		
+			
 	return 0
 	
 if __name__ == '__main__':

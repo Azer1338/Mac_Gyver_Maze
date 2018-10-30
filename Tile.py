@@ -15,15 +15,11 @@ class Tile():
 					"Guard"		: "Gardien.png"
 				}
 				
-	def __init__(self, obj_what, pos_x, pos_y):
+	def __init__(self, obj_what):
 		
 		#load the picture/rectangle of the object
 		self.img_pattern = None
 		self.img_pattern_rect = None
-				
-		#Position in the matrix
-		self.pos_x_matrix = pos_x
-		self.pos_y_matrix = pos_y
 
 		# Link the kind of object with the icon picture
 		if obj_what == "Wall":

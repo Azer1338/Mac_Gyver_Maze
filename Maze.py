@@ -24,6 +24,6 @@ class Maze():
 		
 		#Close the file to save CPU
 		fichier.close()	
-		print(numpy.array(self.maze_matrix))
+		#print(numpy.array(self.maze_matrix))
 	
 
