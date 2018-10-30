@@ -61,20 +61,20 @@ def main():
 					
 				#Player moves
 				if evt.key == pygame.K_UP:
-					Mac_Gyver.move_up(Game_screen)
+					Mac_Gyver.move_up()
 				if evt.key == pygame.K_DOWN:
-					Mac_Gyver.move_down(Game_screen)
+					Mac_Gyver.move_down()
 				if evt.key == pygame.K_LEFT:
-					Mac_Gyver.move_left(Game_screen)
+					Mac_Gyver.move_left()
 				if evt.key == pygame.K_RIGHT:
-					Mac_Gyver.move_right(Game_screen)
+					Mac_Gyver.move_right()
 				
 				#Backpack display
 				if evt.key == pygame.K_SPACE:
-					Game_screen.display_backpack(Mac_Gyver, Game_screen)
+					Game_screen.display_backpack(Mac_Gyver)
 		
 		#Check if the game is finished
-		if Game_screen.victory_game != "On Going": 
+		if Game_screen.status_game != "On Going": 
 			#Game over - Display the ending screen
 			Game_screen.ending_display()
 			infinity_loop = False

@@ -33,7 +33,7 @@ class Screen_Monitor():
 	def __init__(self):
 		#Attribute
 		self.screen = None
-		self.victory_game = "On Going"
+		self.status_game = "On Going"
 	
 		#Initialisation of the pygame library
 		pygame.init()
@@ -108,7 +108,7 @@ class Screen_Monitor():
 		#Add a image of the object on the cell (pos_x, pos_y)
 		self.screen.blit(pattern,(pos_x_in_matrix*Screen_Monitor.SPRITE_SIZE, pos_y_in_matrix*Screen_Monitor.SPRITE_SIZE))
 			
-	def display_backpack(self,player,screen):
+	def display_backpack(self,character):
 		#Create a new screen
 		self.screen_backpack = pygame.display.set_mode((self.WIDTH_SCREEN,self.HEIGHT_SCREEN))
 		
@@ -117,13 +117,13 @@ class Screen_Monitor():
 		
 		#Write the player s backpack content
 		font = pygame.font.Font(None, 24)
-		backpack_player = font.render(str(numpy.array(player.backpack)),1,(255,255,255))
-		self.screen_backpack.blit(backpack_player, (300, 300))
+		backpack_character = font.render(str(numpy.array(character.backpack)),1,(255,255,255))
+		self.screen_backpack.blit(backpack_character, (300, 300))
 		
 		#Let the screen visible during few seconds		
 		pygame.display.flip()
 		
-		pygame.time.delay(10000)
+		pygame.time.delay(1000)
 		
 		self.initialise_screen()
 		
@@ -140,7 +140,7 @@ class Screen_Monitor():
 		self.ending_screen.blit(Game_over_title, (self.WIDTH_SCREEN/2 -75, self.HEIGHT_SCREEN/2))
 		
 		#Display the VICTORY or LOSER player's status
-		ending_title = font.render(str(self.victory_game),1,(255,255,255))
+		ending_title = font.render(str(self.status_game),1,(255,255,255))
 			
 		self.ending_screen.blit(ending_title, (self.WIDTH_SCREEN/2 - 50, self.HEIGHT_SCREEN/2 + 100))
 		

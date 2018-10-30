@@ -17,77 +17,63 @@ class Character():
 		self.perso = who
 		self.screen_to_display = screen
 		
+		self.pos_x_matrix = 0
+		self.pos_y_matrix = 0
+		
 		#Initialisation of the backpack
 		self.backpack = []
 		
+		#Mesure of the matrix per side
+		self.length_matrix = len(screen.screen_maze_matrix)
+		
+		#Initialisation of Character's position
+		self.initialise_position_on_maze_matrix()
+	
+	def initialise_position_on_maze_matrix(self):
 		#Initial position of the icon in the maze matrix
-		#Retain the pos x & y of the Character
-		for i in range(0,self.screen_to_display.LENGTH_PER_SIDE):
-			for j in range(0,self.screen_to_display.LENGTH_PER_SIDE):
-				if self.screen_to_display.screen_maze_matrix[j][i] == who:
+		#Retain the pos x & y of the character from the maze matrix
+		for i in range(0,self.length_matrix):
+			for j in range(0,self.length_matrix):
+				if self.screen_to_display.screen_maze_matrix[j][i] == self.perso:
 					#Position
 					self.pos_x_matrix = j
 					self.pos_y_matrix = i
-					print(self.pos_x_matrix,self.pos_y_matrix)
-		
-		#Mesure of the matrix per side
-		self.length_side_on_screen = screen.LENGTH_PER_SIDE - 1
-		
-		#Display the Character on screen
-		screen.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
-		
-	def move_up(self,screen):
+					
+		#Display the character on screen
+		self.screen_to_display.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
+
+	def move_up(self):
 		#Character move up on the screen
 		move = self.pos_y_matrix - Character.SPEED
 		
-		#Stay in the screen
-		new_position= self.stay_in_frame(move,self.pos_y_matrix)
-		
 		#Event during walking on the way to go home
-		if new_position != self.pos_y_matrix:
-			self.action_on_motion("Y",new_position)
+		self.action_on_motion("Y",move)
 
-	def move_down(self,screen):
+	def move_down(self):
 		#Character move down on the screen
 		move = self.pos_y_matrix + Character.SPEED
 		
-		#Stay in the screen
-		new_position= self.stay_in_frame(move,self.pos_y_matrix)
-		
 		#Event during walking on the way to go home
-		if new_position != self.pos_y_matrix:
-			self.action_on_motion("Y",new_position)
+		self.action_on_motion("Y",move)
 			
-	def move_left(self,screen):
+	def move_left(self):
 		#Character move left on the screen
 		move = self.pos_x_matrix - Character.SPEED
 		
-		#Stay in the screen
-		new_position= self.stay_in_frame(move,self.pos_x_matrix)
-		
 		#Event during walking on the way to go home
-		if new_position != self.pos_x_matrix:
-			self.action_on_motion("X",new_position)
+		self.action_on_motion("X",move)
 		
-	def move_right(self,screen):
+	def move_right(self):
 		#Character move right on the screen	
 		move = self.pos_x_matrix + Character.SPEED
 		
-		#Stay in the screen
-		new_position = self.stay_in_frame(move,self.pos_x_matrix)
-		
 		#Event during walking on the way to go home
-		if new_position != self.pos_x_matrix:
-			self.action_on_motion("X",new_position)	
-		
-	def stay_in_frame (self, new_pos, init_pos):
-		#If move out of frame
-		if new_pos >= self.screen_to_display.LENGTH_PER_SIDE or new_pos < 0 :
-			new_pos = init_pos
-		
-		return new_pos
+		self.action_on_motion("X",move)	
 			
-	def action_on_motion(self, axis, new_position):
+	def action_on_motion(self, axis, move_proposal):
+		# Check if the character is still in the screen frame
+		new_position = self.stay_in_frame(move_proposal,self.pos_x_matrix)
+		
 		#On the next tile, the Character can find:
 		#If Wall, the Character could go there. Stay on same tile		
 		if axis == "X" :
@@ -96,34 +82,36 @@ class Character():
 		elif axis == "Y" :
 			self.Check_next_tile(self.pos_x_matrix, new_position)
 			
-		else:
-			Print("Axis unknown")
+	def stay_in_frame (self, pos_proposal, init_pos):
+		#Make sure that the position prpposed will be in the screen frame
+		if pos_proposal >= self.length_matrix or pos_proposal < 0 :
+			pos_proposal = init_pos
+		
+		return pos_proposal
 		
 	def Check_next_tile(self, Xpos_in_matrice, Ypos_in_matrice):
 		
 		if self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice] == "Wall" :
-			print("/!\ Wall")
-			print ("")
+			#Characters goes back to the initial position
 			Xpos_in_matrice = self.pos_x_matrix
 			Ypos_in_matrice = self.pos_y_matrix
 			
 		else:
+			#The character will change from initial position to the new one
 			if self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice] == "Path" :
-				#No actions
+				#No action on Path tiles
 				pass
 				
 			elif self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice] == "Guard" :
-				#Backpack check
-				self.screen_to_display.victory_game = self.check_backpack_content()
+				#Status of the overall game changed - Backpack checked
+				self.check_backpack_content()
 				pass
 				
-			else: #An object
+			else: #On all other tiles
 				#Add the object in the backpack
-				self.backpack.append(self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice])
+				self.add_backpack_content(self.screen_to_display.screen_maze_matrix[Xpos_in_matrice][Ypos_in_matrice])
 					
 			#Replace the actual tile by a path
-			print("Path:{},{}".format(self.pos_x_matrix, self.pos_y_matrix))
-			print("Player:{},{}".format(Xpos_in_matrice,Ypos_in_matrice))
 			self.screen_to_display.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = "Path"
 			
 			#Swap the new position with actual position
@@ -137,12 +125,13 @@ class Character():
 			
 	def check_backpack_content(self):
 		#Verify if 3 elements are in the characters' backpack
+		#Send back the status of the game depending of the status
 		if len(self.backpack) == 3:
-			condition = "Victory"
+			self.screen_to_display.status_game = "Victory"
 
 		else :
-			condition = "LOSER : At least 1 thing is missing"
+			self.screen_to_display.status_game = "LOSER : At least 1 thing is missing"
 			
-		return condition
-			
-			
+	def add_backpack_content(self, obj):
+		#Add an object in the backpack
+		self.backpack.append(obj)
