@@ -137,6 +137,7 @@ class Screen_Monitor():
 
 		# Write the player s backpack content
 		font = pygame.font.Font(None, 24)
+		
 		Game_over_title = font.render("GAME-OVER", 1, (255, 255, 255))
 		self.ending_screen.blit(Game_over_title, (self.WIDTH_SCREEN / 2 - 75, self.HEIGHT_SCREEN / 2))
 

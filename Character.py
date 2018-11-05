@@ -68,15 +68,16 @@ class Character():
 		self.action_on_motion("X", move)
 
 	def action_on_motion(self, axis, move_proposal):
-		# Check if the character is still in the screen frame
-		new_position = self.stay_in_frame(move_proposal, self.pos_x_matrix)
-
 		# On the next tile, the Character can find:
 		# If Wall, the Character could go there. Stay on same tile
 		if axis == "X":
+			# Check if the character is still in the screen frame
+			new_position = self.stay_in_frame(move_proposal, self.pos_x_matrix)
 			self.check_next_tile(new_position, self.pos_y_matrix)
 
 		elif axis == "Y":
+			# Check if the character is still in the screen frame
+			new_position = self.stay_in_frame(move_proposal, self.pos_y_matrix)
 			self.check_next_tile(self.pos_x_matrix, new_position)
 
 	def stay_in_frame(self, pos_proposal, init_pos):
@@ -117,6 +118,8 @@ class Character():
 
 			# Place the Character on the new position
 			self.screen_to_display.screen_maze_matrix_updated[self.pos_x_matrix][self.pos_y_matrix] = self.perso
+			
+			print("X={},Y={}".format(self.pos_x_matrix, self.pos_y_matrix))
 
 	def check_backpack_content(self):
 		# Verify if 3 elements are in the characters' backpack
