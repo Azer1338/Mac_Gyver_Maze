@@ -135,13 +135,8 @@ class Screen_Monitor():
 		# Fill the screen with a single color
 		self.ending_screen.fill((100, 0, 150))
 
-		# Write the player s backpack content
-		font = pygame.font.Font(None, 24)
-		
-		Game_over_title = font.render("GAME-OVER", 1, (255, 255, 255))
-		self.ending_screen.blit(Game_over_title, (self.WIDTH_SCREEN / 2 - 75, self.HEIGHT_SCREEN / 2))
-
 		# Display the VICTORY or LOSER player's status
+		font = pygame.font.Font(None, 24)
 		ending_title = font.render(str(self.status_game), 1, (255, 255, 255))
 
 		self.ending_screen.blit(ending_title, (self.WIDTH_SCREEN/2 - 50, self.HEIGHT_SCREEN/2 + 100))
